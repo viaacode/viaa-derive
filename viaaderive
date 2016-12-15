@@ -268,6 +268,45 @@ LOGDIR="LOGS"
  # container settings
  STREAMING_WEBM_OPTS+=(-f webm)
 
+# Production IMX settings
+    # output settings
+    PRODUCTION_IMX_EXTENSION="mov"
+    PRODUCTION_IMX_SUFFIX=""
+    PRODUCTION_IMX_RELATIVE_PATH="PRODUCTION_IMX"
+    # video settings
+    PRODUCTION_IMX_OPTS+=(-r pal)
+    PRODUCTION_IMX_OPTS+=(-c:v mpeg2video)
+    PRODUCTION_IMX_OPTS+=(-intra_vlc 1)
+    PRODUCTION_IMX_OPTS+=(-non_linear_quant 1)
+    PRODUCTION_IMX_OPTS+=(-qmin 1)
+    PRODUCTION_IMX_OPTS+=(-dc 10)
+    PRODUCTION_IMX_OPTS+=(-lmin QP2LAMBDA)
+    PRODUCTION_IMX_OPTS+=(-ps 1)
+    PRODUCTION_IMX_OPTS+=(-flags +ildct+ilme)
+    PRODUCTION_IMX_OPTS+=(-pix_fmt yuv422p)
+    PRODUCTION_IMX_OPTS+=(-top 1)
+    PRODUCTION_IMX_OPTS+=(-mpv_flags strict_gop)
+    PRODUCTION_IMX_OPTS+=(-aspect 4:3)
+    PRODUCTION_IMX_OPTS+=(-qmax 12)
+    PRODUCTION_IMX_OPTS+=(-g 1)
+    PRODUCTION_IMX_OPTS+=(-intra)
+    PRODUCTION_IMX_OPTS+=(-b:v 50M)
+    PRODUCTION_IMX_OPTS+=(-maxrate:v 50M)
+    PRODUCTION_IMX_OPTS+=(-minrate:v 50M)
+    PRODUCTION_IMX_OPTS+=(-bufsize 2000000)
+    PRODUCTION_IMX_OPTS+=(-rc_init_occupancy 2000000)
+    PRODUCTION_IMX_OPTS+=(-rc_max_vbv_use 1)
+    PRODUCTION_IMX_OPTS+=(-rc_min_vbv_use 1)
+    PRODUCTION_IMX_OPTS+=(-rc_buf_aggressivity 0.25)
+    PRODUCTION_IMX_OPTS+=(-vbsf imxdump)
+    PRODUCTION_IMX_OPTS+=(-tag:v mx5p)
+    # audio settings
+    PRODUCTION_IMX_OPTS+=(-c:a pcm_s16le)
+    # container settings
+    SCREENING_PRORES_OPTS+=(-f mov)
+    SCREENING_PRORES_OPTS+=(-map 0:v)
+    SCREENING_PRORES_OPTS+=(-map 0:a)
+
 # FRAMEMD5 settings
  # output settings
  FRAMEMD5_EXTENSION="md5"
