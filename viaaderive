@@ -215,7 +215,7 @@ LOGDIR="LOGS"
  STREAMING_WEBM_SUFFIX=""
  STREAMING_WEBM_RELATIVE_PATH="STREAMING_WEBM"
  # video settings
- STREAMING_WEBM_OPTS+=(-c:v vp10)
+ STREAMING_WEBM_OPTS+=(-c:v vp9)
  STREAMING_WEBM_OPTS+=(-pix_fmt yuv420p)
  STREAMING_WEBM_OPTS+=(-maxrate 2000k) # set maximum bitrate despite quality
  # audio settings
