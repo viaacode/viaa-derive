@@ -2,19 +2,63 @@
 # creates derivative video files
 # requires ffmpeg compiled with libx264 (yuv 8-bit), libvpx, libopus, and ffprobe
 
-STREAMING_MPEG4_ENABLE=true
-STREAMING_WEBM_ENABLE=true
-SCREENING_PRORES_ENABLE=true
-FRAMEMD5_ENABLE=true
-SCREENING_FFV1_ENABLE=true
-
 # usage
 _usage(){
- echo "VIAA derivative script"
- echo
- echo "$(basename "$${0}") inputvideo1 [inputvideo2 ... ]"
+    echo "VIAA derivative script"
+    echo
+    echo "$(basename "$${0}") inputvideo1 [inputvideo2 ... ]"
+    echo
+    echo "-o options lists separated by '+'"
+    echo "   options include:"
+    echo "   mpeg4"
+    echo "   webm"
+    echo "   framemd5"
+    echo "   prores"
+    echo "   ffv1"
+    echo
+    echo "Example:"
+    echo "#(basename "${0}") -o mpeg4+prores+webm+ffv1 FILE1 FILE2"
+    echo "would make those four outputs for each of the two inputs."
+    echo
 }
 [ "${#}" = 0 ] && _usage
+
+OPTIND=1
+while getopts ":o:h" OPT ; do
+    case "${OPT}" in
+        o) OUTPUT_OPTIONS="${OPTARG}";;
+        h) _usage;;
+        *) echo "bad option -${OPTARG}" ; _usage ;;
+        :) echo "Option -${OPTARG} requires an argument" ; _writeerrorlog "makebroadcast" "The option selected required an argument and none was provided. The script had to exit." ; exit 1 ;;
+    esac
+done
+shift $(( ${OPTIND} - 1 ))
+
+if [[ "+$OUTPUT_OPTIONS+" = *"+mpeg4+"* ]] ; then
+    STREAMING_MPEG4_ENABLE=true
+else
+    STREAMING_MPEG4_ENABLE=false
+fi
+if [[ "+$OUTPUT_OPTIONS+" = *"+webm+"* ]] ; then
+    STREAMING_WEBM_ENABLE=true
+else
+    STREAMING_WEBM_ENABLE=false
+fi
+if [[ "+$OUTPUT_OPTIONS+" = *"+framemd5+"* ]] ; then
+    FRAMEMD5_ENABLE=true
+else
+    FRAMEMD5_ENABLE=false
+fi
+if [[ "+$OUTPUT_OPTIONS+" = *"+prores+"* ]] ; then
+    SCREENING_PRORES_ENABLE=true
+else
+    SCREENING_PRORES_ENABLE=false
+fi
+if [[ "+$OUTPUT_OPTIONS+" = *"+ffv1+"* ]] ; then
+    SCREENING_FFV1_ENABLE=true
+else
+    SCREENING_FFV1_ENABLE=false
+fi
 
 # _report function handles display of messages to operator
 _report(){
