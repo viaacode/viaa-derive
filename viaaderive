@@ -5,6 +5,7 @@
 STREAMING_MPEG4_ENABLE=true
 STREAMING_WEBM_ENABLE=true
 SCREENING_PRORES_ENABLE=true
+FRAMEMD5_ENABLE=true
 SCREENING_FFV1_ENABLE=true
 
 # usage
@@ -223,6 +224,15 @@ LOGDIR="LOGS"
  # container settings
  STREAMING_WEBM_OPTS+=(-f webm)
 
+# FRAMEMD5 settings
+ # output settings
+ FRAMEMD5_EXTENSION="md5"
+ FRAMEMD5_SUFFIX="_framemd5"
+ FRAMEMD5_RELATIVE_PATH="FRAMEMD5"
+ # container settings
+ FRAMEMD5_OPTS+=(-f framemd5)
+ FRAMEMD5_OPTS+=(-map 0:v)
+
 # SCREENING_PRORES settings
  # output settings
  SCREENING_PRORES_EXTENSION="mov"
@@ -287,6 +297,16 @@ while [ "${*}" != "" ] ; do
         else
             _mkdir2 "$(dirname "${STREAMING_WEBM_OUTPUT}")" "${LOGDIR}"
             OUTPUTS+=(${STREAMING_WEBM_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${STREAMING_WEBM_OUTPUT})
+        fi
+    fi
+
+    if "${FRAMEMD5_ENABLE}" ; then
+        FRAMEMD5_OUTPUT="${FRAMEMD5_RELATIVE_PATH}/$(basename "${INPUT%.*}")${FRAMEMD5_SUFFIX}.${FRAMEMD5_EXTENSION}"
+        if [ -f "${FRAMEMD5_OUTPUT}" ] ; then
+            _report -wt "$FRAMEMD5_OUTPUT already exists, skipping"
+        else
+            _mkdir2 "$(dirname "${FRAMEMD5_OUTPUT}")" "${LOGDIR}"
+            OUTPUTS+=(${FRAMEMD5_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${FRAMEMD5_OUTPUT})
         fi
     fi
 
