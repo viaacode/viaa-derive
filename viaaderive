@@ -2,6 +2,7 @@
 # creates derivative video files
 # requires ffmpeg compiled with lib264 (yuv 8-bit) and ffprobe
 
+STREAMING_MPEG4_ENABLE=true
 SCREENING_FFV1_ENABLE=true
 
 # usage
@@ -267,6 +268,11 @@ while [ "${*}" != "" ] ; do
      _add_video_filter "setsar=sar*2"
    fi
 
+    if [[ "${STREAMING_MPEG4_ENABLE}"  ]] ; then
+        STREAMING_MPEG4_OUTPUT="${STREAMING_MPEG4_RELATIVE_PATH}/$(basename "${INPUT%.*}")${STREAMING_MPEG4_SUFFIX}.${STREAMING_MPEG4_EXTENSION}"
+        _mkdir2 "$(dirname "${STREAMING_MPEG4_OUTPUT}")" "${LOGDIR}"
+        OUTPUTS+=(${STREAMING_MPEG4_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${STREAMING_MPEG4_OUTPUT})
+    fi
 
     if [[ "${SCREENING_FFV1_ENABLE}"  ]] ; then
         SCREENING_FFV1_OUTPUT="${SCREENING_FFV1_RELATIVE_PATH}/$(basename "${INPUT%.*}")${SCREENING_FFV1_SUFFIX}.${SCREENING_FFV1_EXTENSION}"
