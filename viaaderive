@@ -3,6 +3,7 @@
 # requires ffmpeg compiled with lib264 (yuv 8-bit) and ffprobe
 
 SCREENING_FFV1_ENABLE=true
+
 # usage
 _usage(){
  echo "VIAA derivative script"
@@ -219,7 +220,6 @@ LOGDIR="LOGS"
  # container settings
  STREAMING_WEBM_OPTS+=(-f webm)
 
-
 # SCREENING_PRORES settings
  # output settings
  SCREENING_PRORES_EXTENSION="mov"
@@ -266,7 +266,7 @@ while [ "${*}" != "" ] ; do
      _add_video_filter "weave=first_field=top"
      _add_video_filter "setsar=sar*2"
    fi
-   
+
 
     if [[ "${SCREENING_FFV1_ENABLE}"  ]] ; then
         SCREENING_FFV1_OUTPUT="${SCREENING_FFV1_RELATIVE_PATH}/$(basename "${INPUT%.*}")${SCREENING_FFV1_SUFFIX}.${SCREENING_FFV1_EXTENSION}"
@@ -278,4 +278,4 @@ while [ "${*}" != "" ] ; do
    echo ffmpeg "${INPUTOPTIONS[@]}" -i "${INPUT}" "${OUTPUTS[@]}"
    ffmpeg "${INPUTOPTIONS[@]}" -i "${INPUT}" "${OUTPUTS[@]}"
    echo
- done
+done
