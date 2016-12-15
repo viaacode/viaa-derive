@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # creates derivative video files
-# requires ffmpeg compiled with lib264 (yuv 8-bit) and ffprobe
+# requires ffmpeg compiled with libx264 (yuv 8-bit), libvpx, libopus, and ffprobe
 
 STREAMING_MPEG4_ENABLE=true
 SCREENING_FFV1_ENABLE=true
