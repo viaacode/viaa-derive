@@ -272,26 +272,42 @@ while [ "${*}" != "" ] ; do
 
     if "${STREAMING_MPEG4_ENABLE}" ; then
         STREAMING_MPEG4_OUTPUT="${STREAMING_MPEG4_RELATIVE_PATH}/$(basename "${INPUT%.*}")${STREAMING_MPEG4_SUFFIX}.${STREAMING_MPEG4_EXTENSION}"
-        _mkdir2 "$(dirname "${STREAMING_MPEG4_OUTPUT}")" "${LOGDIR}"
-        OUTPUTS+=(${STREAMING_MPEG4_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${STREAMING_MPEG4_OUTPUT})
+        if [ -f "${STREAMING_MPEG4_OUTPUT}" ] ; then
+            _report -wt "$STREAMING_MPEG4_OUTPUT already exists, skipping"
+        else
+            _mkdir2 "$(dirname "${STREAMING_MPEG4_OUTPUT}")" "${LOGDIR}"
+            OUTPUTS+=(${STREAMING_MPEG4_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${STREAMING_MPEG4_OUTPUT})
+        fi
     fi
 
     if "${STREAMING_WEBM_ENABLE}" ; then
         STREAMING_WEBM_OUTPUT="${STREAMING_WEBM_RELATIVE_PATH}/$(basename "${INPUT%.*}")${STREAMING_WEBM_SUFFIX}.${STREAMING_WEBM_EXTENSION}"
-        _mkdir2 "$(dirname "${STREAMING_WEBM_OUTPUT}")" "${LOGDIR}"
-        OUTPUTS+=(${STREAMING_WEBM_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${STREAMING_WEBM_OUTPUT})
+        if [ -f "${STREAMING_WEBM_OUTPUT}" ] ; then
+            _report -wt "$STREAMING_WEBM_OUTPUT already exists, skipping"
+        else
+            _mkdir2 "$(dirname "${STREAMING_WEBM_OUTPUT}")" "${LOGDIR}"
+            OUTPUTS+=(${STREAMING_WEBM_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${STREAMING_WEBM_OUTPUT})
+        fi
     fi
 
     if "${SCREENING_PRORES_ENABLE}" ; then
         SCREENING_PRORES_OUTPUT="${SCREENING_PRORES_RELATIVE_PATH}/$(basename "${INPUT%.*}")${SCREENING_PRORES_SUFFIX}.${SCREENING_PRORES_EXTENSION}"
-        _mkdir2 "$(dirname "${SCREENING_PRORES_OUTPUT}")" "${LOGDIR}"
-        OUTPUTS+=(${SCREENING_PRORES_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${SCREENING_PRORES_OUTPUT})
+        if [ -f "${SCREENING_PRORES_OUTPUT}" ] ; then
+            _report -wt "$SCREENING_PRORES_OUTPUT already exists, skipping"
+        else
+            _mkdir2 "$(dirname "${SCREENING_PRORES_OUTPUT}")" "${LOGDIR}"
+            OUTPUTS+=(${SCREENING_PRORES_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${SCREENING_PRORES_OUTPUT})
+        fi
     fi
 
     if "${SCREENING_FFV1_ENABLE}" ; then
         SCREENING_FFV1_OUTPUT="${SCREENING_FFV1_RELATIVE_PATH}/$(basename "${INPUT%.*}")${SCREENING_FFV1_SUFFIX}.${SCREENING_FFV1_EXTENSION}"
-        _mkdir2 "$(dirname "${SCREENING_FFV1_OUTPUT}")" "${LOGDIR}"
-        OUTPUTS+=(${SCREENING_FFV1_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${SCREENING_FFV1_OUTPUT})
+        if [ -f "${SCREENING_FFV1_OUTPUT}" ] ; then
+            _report -wt "$SCREENING_FFV1_OUTPUT already exists, skipping"
+        else
+            _mkdir2 "$(dirname "${SCREENING_FFV1_OUTPUT}")" "${LOGDIR}"
+            OUTPUTS+=(${SCREENING_FFV1_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${SCREENING_FFV1_OUTPUT})
+        fi
     fi
 
    export FFREPORT="file=${LOGDIR}/$(basename "${0}")_%p_%t.txt"
