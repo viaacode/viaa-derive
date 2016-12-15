@@ -37,6 +37,21 @@ _report(){
  echo "${ECHOOPT}" "${COLOR}${STARTMESSAGE[@]}${MESSAGE}${NC}"
 }
 
+_mkdir2(){
+    local DIR2MAKE=""
+    while [ "${*}" != "" ] ; do
+        DIR2MAKE="${1}"
+        if [ ! -d "${DIR2MAKE}" ] ; then
+            mkdir -p "${DIR2MAKE}"
+            if [ "${?}" -ne 0 ]; then
+                _report -wt "${0}: Can't create directory at ${DIR2MAKE}"
+                exit 1
+            fi
+        fi
+        shift
+    done
+}
+
 _unset_variables(){
   unset VIDEOFILTERCHAIN
   unset AUDIOFILTERCHAIN
