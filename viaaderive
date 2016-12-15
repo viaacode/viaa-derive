@@ -2,6 +2,7 @@
 # creates derivative video files
 # requires ffmpeg compiled with lib264 (yuv 8-bit) and ffprobe
 
+SCREENING_FFV1_ENABLE=true
 # usage
 _usage(){
  echo "VIAA derivative script"
@@ -62,6 +63,7 @@ _unset_variables(){
   unset AUDIO_CHANNELS
   unset CHANNEL_LAYOUT
   unset FFREPORT
+  unset OUTPUTS
 }
 
 # filters for constructing filterchains
@@ -265,17 +267,15 @@ while [ "${*}" != "" ] ; do
      _add_video_filter "setsar=sar*2"
    fi
    
-   SCREENING_FFV1_FILTER
-   SCREENING_FFV1_OUTPUT="${SCREENING_FFV1_RELATIVE_PATH}/$(basename "${INPUT%.*}")${SCREENING_FFV1_SUFFIX}.${SCREENING_FFV1_EXTENSION}"
-   
-   if [ ! -d "$(dirname "${SCREENING_FFV1_OUTPUT}")" ] ; then
-     mkdir -p "$(dirname "${SCREENING_FFV1_OUTPUT}")"
-   fi
-   if [ ! -d "${LOGDIR}" ] ; then
-     mkdir -p "${LOGDIR}"
-   fi
+
+    if [[ "${SCREENING_FFV1_ENABLE}"  ]] ; then
+        SCREENING_FFV1_OUTPUT="${SCREENING_FFV1_RELATIVE_PATH}/$(basename "${INPUT%.*}")${SCREENING_FFV1_SUFFIX}.${SCREENING_FFV1_EXTENSION}"
+        _mkdir2 "$(dirname "${SCREENING_FFV1_OUTPUT}")" "${LOGDIR}"
+        OUTPUTS+=(${SCREENING_FFV1_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${SCREENING_FFV1_OUTPUT})
+    fi
+
    export FFREPORT="file=${LOGDIR}/$(basename "${0}")_%p_%t.txt"
-   echo ffmpeg "${INPUTOPTIONS[@]}" -i "${INPUT}" "${SCREENING_FFV1_OPTS[@]}" -vf "${VIDEOFILTERCHAIN}" "${SCREENING_FFV1_OUTPUT}"
-   ffmpeg "${INPUTOPTIONS[@]}" -i "${INPUT}" "${SCREENING_FFV1_OPTS[@]}" -vf "${VIDEOFILTERCHAIN}" "${SCREENING_FFV1_OUTPUT}"
+   echo ffmpeg "${INPUTOPTIONS[@]}" -i "${INPUT}" "${OUTPUTS[@]}"
+   ffmpeg "${INPUTOPTIONS[@]}" -i "${INPUT}" "${OUTPUTS[@]}"
    echo
  done
