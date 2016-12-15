@@ -3,6 +3,7 @@
 # requires ffmpeg compiled with libx264 (yuv 8-bit), libvpx, libopus, and ffprobe
 
 STREAMING_MPEG4_ENABLE=true
+STREAMING_WEBM_ENABLE=true
 SCREENING_FFV1_ENABLE=true
 
 # usage
@@ -272,6 +273,12 @@ while [ "${*}" != "" ] ; do
         STREAMING_MPEG4_OUTPUT="${STREAMING_MPEG4_RELATIVE_PATH}/$(basename "${INPUT%.*}")${STREAMING_MPEG4_SUFFIX}.${STREAMING_MPEG4_EXTENSION}"
         _mkdir2 "$(dirname "${STREAMING_MPEG4_OUTPUT}")" "${LOGDIR}"
         OUTPUTS+=(${STREAMING_MPEG4_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${STREAMING_MPEG4_OUTPUT})
+    fi
+
+    if [[ "${STREAMING_WEBM_ENABLE}"  ]] ; then
+        STREAMING_WEBM_OUTPUT="${STREAMING_WEBM_RELATIVE_PATH}/$(basename "${INPUT%.*}")${STREAMING_WEBM_SUFFIX}.${STREAMING_WEBM_EXTENSION}"
+        _mkdir2 "$(dirname "${STREAMING_WEBM_OUTPUT}")" "${LOGDIR}"
+        OUTPUTS+=(${STREAMING_WEBM_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${STREAMING_WEBM_OUTPUT})
     fi
 
     if [[ "${SCREENING_FFV1_ENABLE}"  ]] ; then
