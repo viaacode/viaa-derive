@@ -33,10 +33,15 @@ _usage(){
     echo "    --outputoptions   extra outputs options for ffmpeg (applies to all outputs)"
     echo
     echo "    --ffv1            enable ffv1 output (same as '-o ffv1')"
+    echo "    --ffv1path        specify an output file for ffv1"
     echo "    --mpeg4           enable ffv1 output (same as '-o mpeg4')"
+    echo "    --mpeg4path       specify an output file for mpeg4"
     echo "    --prores          enable ffv1 output (same as '-o prores')"
+    echo "    --prorespath      specify an output file for prores"
     echo "    --webm            enable ffv1 output (same as '-o webm')"
+    echo "    --webmpath        specify an output file for webm"
     echo "    --framemd5        enable ffv1 output (same as '-o framemd5')"
+    echo "    --framemd5path    specify an output file for framemd5"
     echo
     echo "Example:"
     echo "$(basename "${0}") -o mpeg4+prores+webm+ffv1 FILE1 FILE2"
@@ -55,10 +60,15 @@ while true ; do
         --inputoptions ) shift ; INPUTOPTIONS+=(${1}) ; shift ;;
         --outputoptions ) shift ; OUTPUTOPTIONS+=(${1}) ; shift ;;
         --ffv1 ) shift ; SCREENING_FFV1_ENABLE=true ;;
+        --ffv1path ) shift ; SCREENING_FFV1_ENABLE=true ; SCREENING_FFV1_OUTPUT="${1}" ; shift ;;
         --mpeg4 ) shift ; STREAMING_MPEG4_ENABLE=true ;;
+        --mpeg4path ) shift ; STREAMING_MPEG4_ENABLE=true ; STREAMING_MPEG4_OUTPUT="${1}" ; shift ;;
         --prores ) shift ; SCREENING_PRORES_ENABLE=true ;;
+        --prorespath ) shift ; SCREENING_PRORES_ENABLE=true ; SCREENING_PRORES_OUTPUT="${1}" ; shift ;;
         --webm ) shift ; STREAMING_WEBM_ENABLE=true ;;
+        --webmpath ) shift ; STREAMING_WEBM_ENABLE=true ; STREAMING_WEBM_OUTPUT="${1}" ; shift ;;
         --framemd5 ) shift ; FRAMEMD5_ENABLE=true ;;
+        --framemd5path ) shift ; FRAMEMD5_ENABLE=true ; FRAMEMD5_OUTPUT="${1}" ; shift ;;
         -* | --* ) echo "Not sure what $1 means." ; echo ; _usage ;;
         * ) break ;;
     esac
@@ -391,7 +401,9 @@ while [ "${*}" != "" ] ; do
     fi
 
     if "${STREAMING_MPEG4_ENABLE}" ; then
-        STREAMING_MPEG4_OUTPUT="${STREAMING_MPEG4_RELATIVE_PATH}/$(basename "${INPUT%.*}")${STREAMING_MPEG4_SUFFIX}.${STREAMING_MPEG4_EXTENSION}"
+        if [[ -z "${STREAMING_MPEG4_OUTPUT+1}" ]] ; then
+            STREAMING_MPEG4_OUTPUT="${STREAMING_MPEG4_RELATIVE_PATH}/$(basename "${INPUT%.*}")${STREAMING_MPEG4_SUFFIX}.${STREAMING_MPEG4_EXTENSION}"
+        fi
         if [ -f "${STREAMING_MPEG4_OUTPUT}" ] ; then
             _report -wt "$STREAMING_MPEG4_OUTPUT already exists, skipping"
         else
@@ -401,7 +413,9 @@ while [ "${*}" != "" ] ; do
     fi
 
     if "${STREAMING_WEBM_ENABLE}" ; then
-        STREAMING_WEBM_OUTPUT="${STREAMING_WEBM_RELATIVE_PATH}/$(basename "${INPUT%.*}")${STREAMING_WEBM_SUFFIX}.${STREAMING_WEBM_EXTENSION}"
+        if [[ -z "${STREAMING_WEBM_OUTPUT+1}" ]] ; then
+            STREAMING_WEBM_OUTPUT="${STREAMING_WEBM_RELATIVE_PATH}/$(basename "${INPUT%.*}")${STREAMING_WEBM_SUFFIX}.${STREAMING_WEBM_EXTENSION}"
+        fi
         if [ -f "${STREAMING_WEBM_OUTPUT}" ] ; then
             _report -wt "$STREAMING_WEBM_OUTPUT already exists, skipping"
         else
@@ -411,7 +425,9 @@ while [ "${*}" != "" ] ; do
     fi
 
     if "${FRAMEMD5_ENABLE}" ; then
-        FRAMEMD5_OUTPUT="${FRAMEMD5_RELATIVE_PATH}/$(basename "${INPUT%.*}")${FRAMEMD5_SUFFIX}.${FRAMEMD5_EXTENSION}"
+        if [[ -z "${FRAMEMD5_OUTPUT+1}" ]] ; then
+            FRAMEMD5_OUTPUT="${FRAMEMD5_RELATIVE_PATH}/$(basename "${INPUT%.*}")${FRAMEMD5_SUFFIX}.${FRAMEMD5_EXTENSION}"
+        fi
         if [ -f "${FRAMEMD5_OUTPUT}" ] ; then
             _report -wt "$FRAMEMD5_OUTPUT already exists, skipping"
         else
@@ -421,7 +437,9 @@ while [ "${*}" != "" ] ; do
     fi
 
     if "${SCREENING_PRORES_ENABLE}" ; then
-        SCREENING_PRORES_OUTPUT="${SCREENING_PRORES_RELATIVE_PATH}/$(basename "${INPUT%.*}")${SCREENING_PRORES_SUFFIX}.${SCREENING_PRORES_EXTENSION}"
+        if [[ -z "${SCREENING_PRORES_OUTPUT+1}" ]] ; then
+            SCREENING_PRORES_OUTPUT="${SCREENING_PRORES_RELATIVE_PATH}/$(basename "${INPUT%.*}")${SCREENING_PRORES_SUFFIX}.${SCREENING_PRORES_EXTENSION}"
+        fi
         if [ -f "${SCREENING_PRORES_OUTPUT}" ] ; then
             _report -wt "$SCREENING_PRORES_OUTPUT already exists, skipping"
         else
@@ -431,7 +449,9 @@ while [ "${*}" != "" ] ; do
     fi
 
     if "${SCREENING_FFV1_ENABLE}" ; then
-        SCREENING_FFV1_OUTPUT="${SCREENING_FFV1_RELATIVE_PATH}/$(basename "${INPUT%.*}")${SCREENING_FFV1_SUFFIX}.${SCREENING_FFV1_EXTENSION}"
+        if [[ -z "${SCREENING_FFV1_OUTPUT+1}" ]] ; then
+            SCREENING_FFV1_OUTPUT="${SCREENING_FFV1_RELATIVE_PATH}/$(basename "${INPUT%.*}")${SCREENING_FFV1_SUFFIX}.${SCREENING_FFV1_EXTENSION}"
+        fi
         if [ -f "${SCREENING_FFV1_OUTPUT}" ] ; then
             _report -wt "$SCREENING_FFV1_OUTPUT already exists, skipping"
         else
