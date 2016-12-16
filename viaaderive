@@ -68,6 +68,10 @@ else
     SCREENING_FFV1_ENABLE=false
 fi
 
+_get_iso8601_c(){
+    date +%Y%m%d-%H%M%S
+}
+
 # _report function handles display of messages to operator
 _report(){
  local RED="$(tput setaf 1)"   # Red      - For Warnings
