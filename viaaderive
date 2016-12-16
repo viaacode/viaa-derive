@@ -11,7 +11,6 @@ INPUTOPTIONS+=(-nostdin)
 INPUTOPTIONS+=(-vsync 0)
 INPUTOPTIONS+=(-v info)
 INPUTOPTIONS+=(-hide_banner)
-INPUTOPTIONS+=(-stats)
 
 # usage
 _usage(){
