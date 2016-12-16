@@ -398,7 +398,7 @@ while [ "${*}" != "" ] ; do
     # encoding options
     _get_input_info "${INPUT}"
     if [[ "${CODEC_NAME}" == "jpeg2000" && "${HEIGHT}" == "288" ]] ; then
-        _add_video_filter "weave=first_field=top"
+        _add_video_filter "weave=first_field=bottom,setfield=tff"
         _add_video_filter "setsar=sar*2"
     fi
 
