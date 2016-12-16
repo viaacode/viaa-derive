@@ -30,6 +30,7 @@ _usage(){
     echo "    --ffmpegpath      path to ffmpeg"
     echo "    --ffprobepath     path to ffprobe"
     echo "    --inputoptions    extra input options for ffmpeg"
+    echo "    --outputoptions   extra outputs options for ffmpeg (applies to all outputs)"
     echo
     echo "Example:"
     echo "$(basename "${0}") -o mpeg4+prores+webm+ffv1 FILE1 FILE2"
@@ -46,6 +47,7 @@ while true ; do
         --ffmpegpath ) shift ; FFMPEG_PATH="${1}" ; shift ;;
         --ffprobepath ) shift ; FFPROBE_PATH="${1}" ; shift ;;
         --inputoptions ) shift ; INPUTOPTIONS+=(${1}) ; shift ;;
+        --outputoptions ) shift ; OUTPUTOPTIONS+=(${1}) ; shift ;;
         -* | --* ) echo "Not sure what $1 means." ; echo ; _usage ;;
         * ) break ;;
     esac
@@ -383,7 +385,7 @@ while [ "${*}" != "" ] ; do
             _report -wt "$STREAMING_MPEG4_OUTPUT already exists, skipping"
         else
             _mkdir2 "$(dirname "${STREAMING_MPEG4_OUTPUT}")"
-            OUTPUTS+=(${STREAMING_MPEG4_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${STREAMING_MPEG4_OUTPUT})
+            OUTPUTS+=(${STREAMING_MPEG4_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${OUTPUTOPTIONS[@]} ${STREAMING_MPEG4_OUTPUT})
         fi
     fi
 
@@ -393,7 +395,7 @@ while [ "${*}" != "" ] ; do
             _report -wt "$STREAMING_WEBM_OUTPUT already exists, skipping"
         else
             _mkdir2 "$(dirname "${STREAMING_WEBM_OUTPUT}")"
-            OUTPUTS+=(${STREAMING_WEBM_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${STREAMING_WEBM_OUTPUT})
+            OUTPUTS+=(${STREAMING_WEBM_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${OUTPUTOPTIONS[@]} ${STREAMING_WEBM_OUTPUT})
         fi
     fi
 
@@ -403,7 +405,7 @@ while [ "${*}" != "" ] ; do
             _report -wt "$FRAMEMD5_OUTPUT already exists, skipping"
         else
             _mkdir2 "$(dirname "${FRAMEMD5_OUTPUT}")"
-            OUTPUTS+=(${FRAMEMD5_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${FRAMEMD5_OUTPUT})
+            OUTPUTS+=(${FRAMEMD5_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${OUTPUTOPTIONS[@]} ${FRAMEMD5_OUTPUT})
         fi
     fi
 
@@ -413,7 +415,7 @@ while [ "${*}" != "" ] ; do
             _report -wt "$SCREENING_PRORES_OUTPUT already exists, skipping"
         else
             _mkdir2 "$(dirname "${SCREENING_PRORES_OUTPUT}")"
-            OUTPUTS+=(${SCREENING_PRORES_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${SCREENING_PRORES_OUTPUT})
+            OUTPUTS+=(${SCREENING_PRORES_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${OUTPUTOPTIONS[@]} ${SCREENING_PRORES_OUTPUT})
         fi
     fi
 
@@ -423,7 +425,7 @@ while [ "${*}" != "" ] ; do
             _report -wt "$SCREENING_FFV1_OUTPUT already exists, skipping"
         else
             _mkdir2 "$(dirname "${SCREENING_FFV1_OUTPUT}")"
-            OUTPUTS+=(${SCREENING_FFV1_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${SCREENING_FFV1_OUTPUT})
+            OUTPUTS+=(${SCREENING_FFV1_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${OUTPUTOPTIONS[@]} ${SCREENING_FFV1_OUTPUT})
         fi
     fi
     _mkdir2 "${LOGDIR}"
