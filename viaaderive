@@ -43,6 +43,7 @@ _usage(){
     echo "    --framemd5path    specify an output file for framemd5"
     echo
     echo "Note that setting a --*path implies that the corresponding output is enabled."
+    echo "Also note that if the output file already exists, then that output will be disabled."
     echo
     echo "Example:"
     echo "$(basename "${0}") -o mpeg4+prores+webm+ffv1 FILE1 FILE2"
