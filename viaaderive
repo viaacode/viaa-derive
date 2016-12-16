@@ -2,6 +2,10 @@
 # creates derivative video files
 # requires ffmpeg compiled with libx264 (yuv 8-bit), libvpx, libopus, and ffprobe
 
+# defaults, can be overwritten with options
+FFMPEG_PATH="ffmpeg"
+FFPROBE_PATH="ffprobe"
+
 # usage
 _usage(){
     echo "VIAA derivative script"
@@ -16,6 +20,8 @@ _usage(){
     echo "                  framemd5"
     echo "                  prores"
     echo "                  ffv1"
+    echo "    --ffmpegpath  path to ffmpeg"
+    echo "    --ffprobepath path to ffprobe"
     echo
     echo "Example:"
     echo "$(basename "${0}") -o mpeg4+prores+webm+ffv1 FILE1 FILE2"
@@ -29,6 +35,8 @@ while true ; do
     case "$1" in
         -o | --outputs ) shift ; OUTPUT_OPTIONS="${1}" ; shift ;;
         -h | --help ) shift ; _usage ;;
+        --ffmpegpath ) shift ; FFMPEG_PATH="${1}" ; shift ;;
+        --ffprobepath ) shift ; FFPROBE_PATH="${1}" ; shift ;;
         -* | --* ) echo "Not sure what $1 means." ; echo ; _usage ;;
         * ) break ;;
     esac
@@ -191,26 +199,26 @@ _filter_to_middle_option(){
 }
 # _get_input info
 _get_input_info(){
- CODEC_NAME=$(ffprobe "${1}" -select_streams v:0 -show_entries stream=codec_name 2>/dev/null -of default=nk=1:nw=1)
- HEIGHT=$(ffprobe "${1}" -select_streams v:0 -show_entries stream=height 2>/dev/null -of default=nk=1:nw=1)
- VIDEOSTREAMCOUNT=$(ffprobe "${1}" -select_streams v -show_entries stream=index -of flat 2>/dev/null | awk 'END { print NR }')
- AUDIOSTREAMCOUNT=$(ffprobe "${1}" -select_streams a -show_entries stream=index -of flat 2>/dev/null | awk 'END { print NR }')
+ CODEC_NAME=$("${FFPROBE_PATH}" "${1}" -select_streams v:0 -show_entries stream=codec_name 2>/dev/null -of default=nk=1:nw=1)
+ HEIGHT=$("${FFPROBE_PATH}" "${1}" -select_streams v:0 -show_entries stream=height 2>/dev/null -of default=nk=1:nw=1)
+ VIDEOSTREAMCOUNT=$("${FFPROBE_PATH}" "${1}" -select_streams v -show_entries stream=index -of flat 2>/dev/null | awk 'END { print NR }')
+ AUDIOSTREAMCOUNT=$("${FFPROBE_PATH}" "${1}" -select_streams a -show_entries stream=index -of flat 2>/dev/null | awk 'END { print NR }')
 }
 
 # _get_audio_mapping handles re-mixing audio to a single track for access
 _get_audio_mapping(){
  _get_audio_index(){
    # get ffmpeg's index value of the first audio stream. Useful for do custom channel mappings.
-   AUDIO_INDEX_1=$(ffprobe "${1}" -show_streams -select_streams a:0 2>/dev/null | grep "^index=" | cut -d = -f 2)
-   AUDIO_INDEX_2=$(ffprobe "${1}" -show_streams -select_streams a:1 2>/dev/null | grep "^index=" | cut -d = -f 2)
+   AUDIO_INDEX_1=$("${FFPROBE_PATH}" "${1}" -show_streams -select_streams a:0 2>/dev/null | grep "^index=" | cut -d = -f 2)
+   AUDIO_INDEX_2=$("${FFPROBE_PATH}" "${1}" -show_streams -select_streams a:1 2>/dev/null | grep "^index=" | cut -d = -f 2)
  }
  _get_audio_channels(){
    # get ffmpeg's channel count of the first audio stream.
-   AUDIO_CHANNELS=$(ffprobe "${1}" -show_streams -select_streams a 2>/dev/null | grep "^channels=" | cut -d = -f 2 | head -n 1)
+   AUDIO_CHANNELS=$("${FFPROBE_PATH}" "${1}" -show_streams -select_streams a 2>/dev/null | grep "^channels=" | cut -d = -f 2 | head -n 1)
  }
  _get_channel_layout(){
    # get ffmpeg's channel count of the first audio stream.
-   CHANNEL_LAYOUT=$(ffprobe "${1}" -show_streams -select_streams a 2>/dev/null | grep "^channel_layout=" | cut -d = -f 2 | head -n 1)
+   CHANNEL_LAYOUT=$("${FFPROBE_PATH}" "${1}" -show_streams -select_streams a 2>/dev/null | grep "^channel_layout=" | cut -d = -f 2 | head -n 1)
  }
  _get_audio_index "${1}"
  _get_audio_channels "${1}"
@@ -414,7 +422,7 @@ while [ "${*}" != "" ] ; do
     fi
     _mkdir2 "${LOGDIR}"
    export FFREPORT="file=${LOGDIR}/$(basename "${0}")_%p_%t.txt"
-   echo ffmpeg "${INPUTOPTIONS[@]}" -i "${INPUT}" "${OUTPUTS[@]}"
-   ffmpeg "${INPUTOPTIONS[@]}" -i "${INPUT}" "${OUTPUTS[@]}"
+   echo "${FFMPEG_PATH}" "${INPUTOPTIONS[@]}" -i "${INPUT}" "${OUTPUTS[@]}"
+   "${FFMPEG_PATH}" "${INPUTOPTIONS[@]}" -i "${INPUT}" "${OUTPUTS[@]}"
    echo
 done
