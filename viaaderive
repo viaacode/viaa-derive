@@ -42,6 +42,8 @@ _usage(){
     echo "    --framemd5        enable ffv1 output (same as '-o framemd5')"
     echo "    --framemd5path    specify an output file for framemd5"
     echo
+    echo "Note that setting a --*path implies that the corresponding output is enabled."
+    echo
     echo "Example:"
     echo "$(basename "${0}") -o mpeg4+prores+webm+ffv1 FILE1 FILE2"
     echo "would make those four outputs for each of the two inputs."
