@@ -6,33 +6,33 @@
 _usage(){
     echo "VIAA derivative script"
     echo
-    echo "$(basename "$${0}") inputvideo1 [inputvideo2 ... ]"
+    echo "$(basename "${0}") inputvideo1 [inputvideo2 ... ]"
     echo
-    echo "-o options lists separated by '+'"
-    echo "   options include:"
-    echo "   mpeg4"
-    echo "   webm"
-    echo "   framemd5"
-    echo "   prores"
-    echo "   ffv1"
+    echo "-h, --help        print this help message"
+    echo "-o, --outputs     options lists separated by '+'"
+    echo "                  options include:"
+    echo "                  mpeg4"
+    echo "                  webm"
+    echo "                  framemd5"
+    echo "                  prores"
+    echo "                  ffv1"
     echo
     echo "Example:"
-    echo "#(basename "${0}") -o mpeg4+prores+webm+ffv1 FILE1 FILE2"
+    echo "$(basename "${0}") -o mpeg4+prores+webm+ffv1 FILE1 FILE2"
     echo "would make those four outputs for each of the two inputs."
     echo
+    exit
 }
 [ "${#}" = 0 ] && _usage
 
-OPTIND=1
-while getopts ":o:h" OPT ; do
-    case "${OPT}" in
-        o) OUTPUT_OPTIONS="${OPTARG}";;
-        h) _usage;;
-        *) echo "bad option -${OPTARG}" ; _usage ;;
-        :) echo "Option -${OPTARG} requires an argument" ; exit 1 ;;
+while true ; do
+    case "$1" in
+        -o | --outputs ) shift ; OUTPUT_OPTIONS="${1}" ; shift ;;
+        -h | --help ) shift ; _usage ;;
+        -* | --* ) echo "Not sure what $1 means." ; echo ; _usage ;;
+        * ) break ;;
     esac
 done
-shift $(( ${OPTIND} - 1 ))
 
 if [[ "+$OUTPUT_OPTIONS+" = *"+mpeg4+"* ]] ; then
     STREAMING_MPEG4_ENABLE=true
