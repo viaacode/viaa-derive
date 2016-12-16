@@ -6,6 +6,13 @@
 FFMPEG_PATH="ffmpeg"
 FFPROBE_PATH="ffprobe"
 
+# default ffmpeg input options
+INPUTOPTIONS+=(-nostdin)
+INPUTOPTIONS+=(-vsync 0)
+INPUTOPTIONS+=(-v info)
+INPUTOPTIONS+=(-hide_banner)
+INPUTOPTIONS+=(-stats)
+
 # usage
 _usage(){
     echo "VIAA derivative script"
@@ -22,6 +29,7 @@ _usage(){
     echo "                      ffv1"
     echo "    --ffmpegpath      path to ffmpeg"
     echo "    --ffprobepath     path to ffprobe"
+    echo "    --inputoptions    extra input options for ffmpeg"
     echo
     echo "Example:"
     echo "$(basename "${0}") -o mpeg4+prores+webm+ffv1 FILE1 FILE2"
@@ -37,6 +45,7 @@ while true ; do
         -h | --help ) shift ; _usage ;;
         --ffmpegpath ) shift ; FFMPEG_PATH="${1}" ; shift ;;
         --ffprobepath ) shift ; FFPROBE_PATH="${1}" ; shift ;;
+        --inputoptions ) shift ; INPUTOPTIONS+=(${1}) ; shift ;;
         -* | --* ) echo "Not sure what $1 means." ; echo ; _usage ;;
         * ) break ;;
     esac
@@ -239,13 +248,6 @@ _get_audio_mapping(){
         _add_audio_filter "aformat=channel_layouts=stereo"
     fi
 }
-
-# input options
-INPUTOPTIONS+=(-nostdin)
-INPUTOPTIONS+=(-vsync 0)
-INPUTOPTIONS+=(-v info)
-INPUTOPTIONS+=(-hide_banner)
-INPUTOPTIONS+=(-stats)
 
 LOGDIR="LOGS"
 
