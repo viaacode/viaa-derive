@@ -368,7 +368,7 @@ while [ "${*}" != "" ] ; do
         if [ -f "${STREAMING_MPEG4_OUTPUT}" ] ; then
             _report -wt "$STREAMING_MPEG4_OUTPUT already exists, skipping"
         else
-            _mkdir2 "$(dirname "${STREAMING_MPEG4_OUTPUT}")" "${LOGDIR}"
+            _mkdir2 "$(dirname "${STREAMING_MPEG4_OUTPUT}")"
             OUTPUTS+=(${STREAMING_MPEG4_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${STREAMING_MPEG4_OUTPUT})
         fi
     fi
@@ -378,7 +378,7 @@ while [ "${*}" != "" ] ; do
         if [ -f "${STREAMING_WEBM_OUTPUT}" ] ; then
             _report -wt "$STREAMING_WEBM_OUTPUT already exists, skipping"
         else
-            _mkdir2 "$(dirname "${STREAMING_WEBM_OUTPUT}")" "${LOGDIR}"
+            _mkdir2 "$(dirname "${STREAMING_WEBM_OUTPUT}")"
             OUTPUTS+=(${STREAMING_WEBM_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${STREAMING_WEBM_OUTPUT})
         fi
     fi
@@ -388,7 +388,7 @@ while [ "${*}" != "" ] ; do
         if [ -f "${FRAMEMD5_OUTPUT}" ] ; then
             _report -wt "$FRAMEMD5_OUTPUT already exists, skipping"
         else
-            _mkdir2 "$(dirname "${FRAMEMD5_OUTPUT}")" "${LOGDIR}"
+            _mkdir2 "$(dirname "${FRAMEMD5_OUTPUT}")"
             OUTPUTS+=(${FRAMEMD5_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${FRAMEMD5_OUTPUT})
         fi
     fi
@@ -398,7 +398,7 @@ while [ "${*}" != "" ] ; do
         if [ -f "${SCREENING_PRORES_OUTPUT}" ] ; then
             _report -wt "$SCREENING_PRORES_OUTPUT already exists, skipping"
         else
-            _mkdir2 "$(dirname "${SCREENING_PRORES_OUTPUT}")" "${LOGDIR}"
+            _mkdir2 "$(dirname "${SCREENING_PRORES_OUTPUT}")"
             OUTPUTS+=(${SCREENING_PRORES_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${SCREENING_PRORES_OUTPUT})
         fi
     fi
@@ -408,11 +408,11 @@ while [ "${*}" != "" ] ; do
         if [ -f "${SCREENING_FFV1_OUTPUT}" ] ; then
             _report -wt "$SCREENING_FFV1_OUTPUT already exists, skipping"
         else
-            _mkdir2 "$(dirname "${SCREENING_FFV1_OUTPUT}")" "${LOGDIR}"
+            _mkdir2 "$(dirname "${SCREENING_FFV1_OUTPUT}")" 
             OUTPUTS+=(${SCREENING_FFV1_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${SCREENING_FFV1_OUTPUT})
         fi
     fi
-
+    _mkdir2 "${LOGDIR}"
    export FFREPORT="file=${LOGDIR}/$(basename "${0}")_%p_%t.txt"
    echo ffmpeg "${INPUTOPTIONS[@]}" -i "${INPUT}" "${OUTPUTS[@]}"
    ffmpeg "${INPUTOPTIONS[@]}" -i "${INPUT}" "${OUTPUTS[@]}"
