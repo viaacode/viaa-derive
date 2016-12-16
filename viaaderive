@@ -32,6 +32,12 @@ _usage(){
     echo "    --inputoptions    extra input options for ffmpeg"
     echo "    --outputoptions   extra outputs options for ffmpeg (applies to all outputs)"
     echo
+    echo "    --ffv1            enable ffv1 output (same as '-o ffv1')"
+    echo "    --mpeg4           enable ffv1 output (same as '-o mpeg4')"
+    echo "    --prores          enable ffv1 output (same as '-o prores')"
+    echo "    --webm            enable ffv1 output (same as '-o webm')"
+    echo "    --framemd5        enable ffv1 output (same as '-o framemd5')"
+    echo
     echo "Example:"
     echo "$(basename "${0}") -o mpeg4+prores+webm+ffv1 FILE1 FILE2"
     echo "would make those four outputs for each of the two inputs."
@@ -48,6 +54,11 @@ while true ; do
         --ffprobepath ) shift ; FFPROBE_PATH="${1}" ; shift ;;
         --inputoptions ) shift ; INPUTOPTIONS+=(${1}) ; shift ;;
         --outputoptions ) shift ; OUTPUTOPTIONS+=(${1}) ; shift ;;
+        --ffv1 ) shift ; SCREENING_FFV1_ENABLE=true ;;
+        --mpeg4 ) shift ; STREAMING_MPEG4_ENABLE=true ;;
+        --prores ) shift ; SCREENING_PRORES_ENABLE=true ;;
+        --webm ) shift ; STREAMING_WEBM_ENABLE=true ;;
+        --framemd5 ) shift ; FRAMEMD5_ENABLE=true ;;
         -* | --* ) echo "Not sure what $1 means." ; echo ; _usage ;;
         * ) break ;;
     esac
@@ -55,27 +66,27 @@ done
 
 if [[ "+$OUTPUT_OPTIONS+" = *"+mpeg4+"* ]] ; then
     STREAMING_MPEG4_ENABLE=true
-else
+elif [[ -z "${STREAMING_MPEG4_ENABLE+x}" ]] ; then
     STREAMING_MPEG4_ENABLE=false
 fi
 if [[ "+$OUTPUT_OPTIONS+" = *"+webm+"* ]] ; then
     STREAMING_WEBM_ENABLE=true
-else
+elif [[ -z "${STREAMING_WEBM_ENABLE+x}" ]] ; then
     STREAMING_WEBM_ENABLE=false
 fi
 if [[ "+$OUTPUT_OPTIONS+" = *"+framemd5+"* ]] ; then
     FRAMEMD5_ENABLE=true
-else
+elif [[ -z "${FRAMEMD5_ENABLE+x}" ]] ; then
     FRAMEMD5_ENABLE=false
 fi
 if [[ "+$OUTPUT_OPTIONS+" = *"+prores+"* ]] ; then
     SCREENING_PRORES_ENABLE=true
-else
+elif [[ -z "${SCREENING_PRORES_ENABLE+x}" ]] ; then
     SCREENING_PRORES_ENABLE=false
 fi
 if [[ "+$OUTPUT_OPTIONS+" = *"+ffv1+"* ]] ; then
     SCREENING_FFV1_ENABLE=true
-else
+elif [[ -z "${SCREENING_FFV1_ENABLE+x}" ]] ; then
     SCREENING_FFV1_ENABLE=false
 fi
 
