@@ -243,6 +243,10 @@ _get_input_info(){
     AUDIOSTREAMCOUNT=$("${FFPROBE_PATH}" "${1}" -select_streams a -show_entries stream=index -of flat 2>/dev/null | awk 'END { print NR }')
 }
 
+_get_audiostreamcount(){
+    AUDIOSTREAMCOUNT=$(ffprobe "${1}" -select_streams a -show_entries stream=index -of flat 2>/dev/null | awk 'END { print NR }')
+}
+
 # _get_audio_mapping handles re-mixing audio to a single track for access
 _get_audio_mapping(){
     _get_audio_index(){
@@ -288,7 +292,7 @@ STREAMING_MPEG4_OPTS+=(-pix_fmt yuv420p)
 STREAMING_MPEG4_OPTS+=(-crf 21) # increase to reduce quality and size
 STREAMING_MPEG4_OPTS+=(-maxrate 2000k) # set maximum bitrate despite quality
 # audio settings
-STREAMING_MPEG4_OPTS+=(-c:a aac)
+STREAMING_MPEG4_AUDIO_OPTS+=(-c:a aac)
 # container settings
 STREAMING_MPEG4_OPTS+=(-f mp4)
 STREAMING_MPEG4_OPTS+=(-movflags faststart)
@@ -303,7 +307,7 @@ STREAMING_WEBM_OPTS+=(-c:v vp9)
 STREAMING_WEBM_OPTS+=(-pix_fmt yuv420p)
 STREAMING_WEBM_OPTS+=(-maxrate 2000k) # set maximum bitrate despite quality
 # audio settings
-STREAMING_WEBM_OPTS+=(-c:a opus)
+STREAMING_WEBM_AUDIO_OPTS+=(-c:a opus)
 # container settings
 STREAMING_WEBM_OPTS+=(-f webm)
 
@@ -340,11 +344,11 @@ PRODUCTION_IMX_OPTS+=(-rc_buf_aggressivity 0.25)
 PRODUCTION_IMX_OPTS+=(-vbsf imxdump)
 PRODUCTION_IMX_OPTS+=(-tag:v mx5p)
 # audio settings
-PRODUCTION_IMX_OPTS+=(-c:a pcm_s16le)
+PRODUCTION_IMX_AUDIO_OPTS+=(-c:a pcm_s16le)
 # container settings
 SCREENING_PRORES_OPTS+=(-f mov)
 SCREENING_PRORES_OPTS+=(-map 0:v)
-SCREENING_PRORES_OPTS+=(-map 0:a)
+SCREENING_PRORES_AUDIO_OPTS+=(-map 0:a)
 
 # FRAMEMD5 settings
 # output settings
@@ -365,11 +369,11 @@ SCREENING_PRORES_OPTS+=(-c:v prores_ks)
 SCREENING_PRORES_OPTS+=(-profile:v lt) # verify profile?
 SCREENING_PRORES_OPTS+=(-flags +ildct+ilme)
 # audio settings
-SCREENING_PRORES_OPTS+=(-c:a pcm_s16le)
+SCREENING_PRORES_AUDIO_OPTS+=(-c:a pcm_s16le)
 # container settings
 SCREENING_PRORES_OPTS+=(-f mov)
 SCREENING_PRORES_OPTS+=(-map 0:v)
-SCREENING_PRORES_OPTS+=(-map 0:a)
+SCREENING_PRORES_AUDIO_OPTS+=(-map 0:a)
 
 # SCREENING_FFV1 settings
 # output settings
@@ -383,11 +387,11 @@ SCREENING_FFV1_OPTS+=(-g 1)
 SCREENING_FFV1_OPTS+=(-slices 24)
 SCREENING_FFV1_OPTS+=(-slicecrc 1)
 # audio settings
-SCREENING_FFV1_OPTS+=(-c:a flac)
+SCREENING_FFV1_AUDIO_OPTS+=(-c:a flac)
 # container settings
 SCREENING_FFV1_OPTS+=(-f matroska)
 SCREENING_FFV1_OPTS+=(-map 0:v)
-SCREENING_FFV1_OPTS+=(-map 0:a)
+SCREENING_FFV1_AUDIO_OPTS+=(-map 0:a)
 
 while [ "${*}" != "" ] ; do
     _unset_variables
@@ -397,6 +401,8 @@ while [ "${*}" != "" ] ; do
 
     # encoding options
     _get_input_info "${INPUT}"
+    _get_audiostreamcount "${INPUT}"
+    
     if [[ "${CODEC_NAME}" == "jpeg2000" && "${HEIGHT}" == "288" ]] ; then
         _add_video_filter "weave=first_field=bottom,setfield=tff"
         _add_video_filter "setsar=sar*2"
@@ -410,6 +416,9 @@ while [ "${*}" != "" ] ; do
             _report -wt "$STREAMING_MPEG4_OUTPUT already exists, skipping"
         else
             _mkdir2 "$(dirname "${STREAMING_MPEG4_OUTPUT}")"
+            if [[ "${AUDIOSTREAMCOUNT}" > 0 ]] ; then
+                STREAMING_MPEG4_OPTS+=($STREAMING_MPEG4_AUDIO_OPTS[@])
+            fi
             OUTPUTS+=(${STREAMING_MPEG4_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${OUTPUTOPTIONS[@]} ${STREAMING_MPEG4_OUTPUT})
         fi
     fi
@@ -422,6 +431,9 @@ while [ "${*}" != "" ] ; do
             _report -wt "$STREAMING_WEBM_OUTPUT already exists, skipping"
         else
             _mkdir2 "$(dirname "${STREAMING_WEBM_OUTPUT}")"
+            if [[ "${AUDIOSTREAMCOUNT}" > 0 ]] ; then
+                STREAMING_WEBM_OPTS+=($STREAMING_WEBM_AUDIO_OPTS[@])
+            fi
             OUTPUTS+=(${STREAMING_WEBM_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${OUTPUTOPTIONS[@]} ${STREAMING_WEBM_OUTPUT})
         fi
     fi
@@ -446,6 +458,9 @@ while [ "${*}" != "" ] ; do
             _report -wt "$SCREENING_PRORES_OUTPUT already exists, skipping"
         else
             _mkdir2 "$(dirname "${SCREENING_PRORES_OUTPUT}")"
+            if [[ "${AUDIOSTREAMCOUNT}" > 0 ]] ; then
+                SCREENING_PRORES_OPTS+=($SCREENING_PRORES_AUDIO_OPTS[@])
+            fi
             OUTPUTS+=(${SCREENING_PRORES_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${OUTPUTOPTIONS[@]} ${SCREENING_PRORES_OUTPUT})
         fi
     fi
@@ -458,6 +473,9 @@ while [ "${*}" != "" ] ; do
             _report -wt "$SCREENING_FFV1_OUTPUT already exists, skipping"
         else
             _mkdir2 "$(dirname "${SCREENING_FFV1_OUTPUT}")"
+            if [[ "${AUDIOSTREAMCOUNT}" > 0 ]] ; then
+                SCREENING_FFV1_OPTS+=($SCREENING_FFV1_AUDIO_OPTS[@])
+            fi
             OUTPUTS+=(${SCREENING_FFV1_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${OUTPUTOPTIONS[@]} ${SCREENING_FFV1_OUTPUT})
         fi
     fi
