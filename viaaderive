@@ -41,6 +41,9 @@ _usage(){
     echo "    --framemd5        enable ffv1 output (same as '-o framemd5')"
     echo "    --framemd5path    specify an output file for framemd5"
     echo
+    echo "-y, --overwrite       Overwrite output files by default,"
+    echo "                      same as --outputoptions '-y'"
+    echo
     echo "Note that setting a --*path implies that the corresponding output is enabled."
     echo "Also note that if the output file already exists, then that output will be disabled."
     echo
@@ -60,6 +63,7 @@ while true ; do
         --ffprobepath ) shift ; FFPROBE_PATH="${1}" ; shift ;;
         --inputoptions ) shift ; INPUTOPTIONS+=(${1}) ; shift ;;
         --outputoptions ) shift ; OUTPUTOPTIONS+=(${1}) ; shift ;;
+        -y | --overwrite ) shift ; OUTPUTOPTIONS+=(-y) ;;
         --ffv1 ) shift ; SCREENING_FFV1_ENABLE=true ;;
         --ffv1path ) shift ; SCREENING_FFV1_ENABLE=true ; SCREENING_FFV1_OUTPUT="${1}" ; shift ;;
         --mpeg4 ) shift ; STREAMING_MPEG4_ENABLE=true ;;
