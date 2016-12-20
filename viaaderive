@@ -417,7 +417,7 @@ while [ "${*}" != "" ] ; do
         else
             _mkdir2 "$(dirname "${STREAMING_MPEG4_OUTPUT}")"
             if [[ "${AUDIOSTREAMCOUNT}" > 0 ]] ; then
-                STREAMING_MPEG4_OPTS+=($STREAMING_MPEG4_AUDIO_OPTS[@])
+                STREAMING_MPEG4_OPTS+=(${STREAMING_MPEG4_AUDIO_OPTS[@]})
             fi
             OUTPUTS+=(${STREAMING_MPEG4_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${OUTPUTOPTIONS[@]} ${STREAMING_MPEG4_OUTPUT})
         fi
@@ -432,7 +432,7 @@ while [ "${*}" != "" ] ; do
         else
             _mkdir2 "$(dirname "${STREAMING_WEBM_OUTPUT}")"
             if [[ "${AUDIOSTREAMCOUNT}" > 0 ]] ; then
-                STREAMING_WEBM_OPTS+=($STREAMING_WEBM_AUDIO_OPTS[@])
+                STREAMING_WEBM_OPTS+=(${STREAMING_WEBM_AUDIO_OPTS[@]})
             fi
             OUTPUTS+=(${STREAMING_WEBM_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${OUTPUTOPTIONS[@]} ${STREAMING_WEBM_OUTPUT})
         fi
@@ -459,7 +459,7 @@ while [ "${*}" != "" ] ; do
         else
             _mkdir2 "$(dirname "${SCREENING_PRORES_OUTPUT}")"
             if [[ "${AUDIOSTREAMCOUNT}" > 0 ]] ; then
-                SCREENING_PRORES_OPTS+=($SCREENING_PRORES_AUDIO_OPTS[@])
+                SCREENING_PRORES_OPTS+=(${SCREENING_PRORES_AUDIO_OPTS[@]})
             fi
             OUTPUTS+=(${SCREENING_PRORES_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${OUTPUTOPTIONS[@]} ${SCREENING_PRORES_OUTPUT})
         fi
@@ -474,7 +474,7 @@ while [ "${*}" != "" ] ; do
         else
             _mkdir2 "$(dirname "${SCREENING_FFV1_OUTPUT}")"
             if [[ "${AUDIOSTREAMCOUNT}" > 0 ]] ; then
-                SCREENING_FFV1_OPTS+=($SCREENING_FFV1_AUDIO_OPTS[@])
+                SCREENING_FFV1_OPTS+=(${SCREENING_FFV1_AUDIO_OPTS[@]})
             fi
             OUTPUTS+=(${SCREENING_FFV1_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${OUTPUTOPTIONS[@]} ${SCREENING_FFV1_OUTPUT})
         fi
