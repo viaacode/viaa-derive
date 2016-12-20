@@ -9,7 +9,6 @@ FFPROBE_PATH="ffprobe"
 # default ffmpeg input options
 INPUTOPTIONS+=(-nostdin)
 INPUTOPTIONS+=(-vsync 0)
-INPUTOPTIONS+=(-v info)
 INPUTOPTIONS+=(-hide_banner)
 
 # usage
