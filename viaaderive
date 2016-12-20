@@ -415,52 +415,52 @@ while [ "${*}" != "" ] ; do
         if [[ -z "${STREAMING_MPEG4_OUTPUT+1}" ]] ; then
             STREAMING_MPEG4_OUTPUT="${STREAMING_MPEG4_RELATIVE_PATH}/$(basename "${INPUT%.*}")${STREAMING_MPEG4_SUFFIX}.${STREAMING_MPEG4_EXTENSION}"
         fi
-            _mkdir2 "$(dirname "${STREAMING_MPEG4_OUTPUT}")"
-            if [[ "${AUDIOSTREAMCOUNT}" > 0 ]] ; then
-                STREAMING_MPEG4_OPTS+=(${STREAMING_MPEG4_AUDIO_OPTS[@]})
-            fi
-            OUTPUTS+=(${STREAMING_MPEG4_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${OUTPUTOPTIONS[@]} ${STREAMING_MPEG4_OUTPUT})
+        _mkdir2 "$(dirname "${STREAMING_MPEG4_OUTPUT}")"
+        if [[ "${AUDIOSTREAMCOUNT}" > 0 ]] ; then
+            STREAMING_MPEG4_OPTS+=(${STREAMING_MPEG4_AUDIO_OPTS[@]})
+        fi
+        OUTPUTS+=(${STREAMING_MPEG4_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${OUTPUTOPTIONS[@]} ${STREAMING_MPEG4_OUTPUT})
     fi
 
     if "${STREAMING_WEBM_ENABLE}" ; then
         if [[ -z "${STREAMING_WEBM_OUTPUT+1}" ]] ; then
             STREAMING_WEBM_OUTPUT="${STREAMING_WEBM_RELATIVE_PATH}/$(basename "${INPUT%.*}")${STREAMING_WEBM_SUFFIX}.${STREAMING_WEBM_EXTENSION}"
         fi
-            _mkdir2 "$(dirname "${STREAMING_WEBM_OUTPUT}")"
-            if [[ "${AUDIOSTREAMCOUNT}" > 0 ]] ; then
-                STREAMING_WEBM_OPTS+=(${STREAMING_WEBM_AUDIO_OPTS[@]})
-            fi
-            OUTPUTS+=(${STREAMING_WEBM_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${OUTPUTOPTIONS[@]} ${STREAMING_WEBM_OUTPUT})
+        _mkdir2 "$(dirname "${STREAMING_WEBM_OUTPUT}")"
+        if [[ "${AUDIOSTREAMCOUNT}" > 0 ]] ; then
+            STREAMING_WEBM_OPTS+=(${STREAMING_WEBM_AUDIO_OPTS[@]})
+        fi
+        OUTPUTS+=(${STREAMING_WEBM_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${OUTPUTOPTIONS[@]} ${STREAMING_WEBM_OUTPUT})
     fi
 
     if "${FRAMEMD5_ENABLE}" ; then
         if [[ -z "${FRAMEMD5_OUTPUT+1}" ]] ; then
             FRAMEMD5_OUTPUT="${FRAMEMD5_RELATIVE_PATH}/$(basename "${INPUT%.*}")${FRAMEMD5_SUFFIX}.${FRAMEMD5_EXTENSION}"
         fi
-            _mkdir2 "$(dirname "${FRAMEMD5_OUTPUT}")"
-            OUTPUTS+=(${FRAMEMD5_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${OUTPUTOPTIONS[@]} ${FRAMEMD5_OUTPUT})
+        _mkdir2 "$(dirname "${FRAMEMD5_OUTPUT}")"
+        OUTPUTS+=(${FRAMEMD5_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${OUTPUTOPTIONS[@]} ${FRAMEMD5_OUTPUT})
     fi
 
     if "${SCREENING_PRORES_ENABLE}" ; then
         if [[ -z "${SCREENING_PRORES_OUTPUT+1}" ]] ; then
             SCREENING_PRORES_OUTPUT="${SCREENING_PRORES_RELATIVE_PATH}/$(basename "${INPUT%.*}")${SCREENING_PRORES_SUFFIX}.${SCREENING_PRORES_EXTENSION}"
         fi
-            _mkdir2 "$(dirname "${SCREENING_PRORES_OUTPUT}")"
-            if [[ "${AUDIOSTREAMCOUNT}" > 0 ]] ; then
-                SCREENING_PRORES_OPTS+=(${SCREENING_PRORES_AUDIO_OPTS[@]})
-            fi
-            OUTPUTS+=(${SCREENING_PRORES_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${OUTPUTOPTIONS[@]} ${SCREENING_PRORES_OUTPUT})
+        _mkdir2 "$(dirname "${SCREENING_PRORES_OUTPUT}")"
+        if [[ "${AUDIOSTREAMCOUNT}" > 0 ]] ; then
+            SCREENING_PRORES_OPTS+=(${SCREENING_PRORES_AUDIO_OPTS[@]})
+        fi
+        OUTPUTS+=(${SCREENING_PRORES_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${OUTPUTOPTIONS[@]} ${SCREENING_PRORES_OUTPUT})
     fi
 
     if "${SCREENING_FFV1_ENABLE}" ; then
         if [[ -z "${SCREENING_FFV1_OUTPUT+1}" ]] ; then
             SCREENING_FFV1_OUTPUT="${SCREENING_FFV1_RELATIVE_PATH}/$(basename "${INPUT%.*}")${SCREENING_FFV1_SUFFIX}.${SCREENING_FFV1_EXTENSION}"
         fi
-            _mkdir2 "$(dirname "${SCREENING_FFV1_OUTPUT}")"
-            if [[ "${AUDIOSTREAMCOUNT}" > 0 ]] ; then
-                SCREENING_FFV1_OPTS+=(${SCREENING_FFV1_AUDIO_OPTS[@]})
-            fi
-            OUTPUTS+=(${SCREENING_FFV1_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${OUTPUTOPTIONS[@]} ${SCREENING_FFV1_OUTPUT})
+        _mkdir2 "$(dirname "${SCREENING_FFV1_OUTPUT}")"
+        if [[ "${AUDIOSTREAMCOUNT}" > 0 ]] ; then
+            SCREENING_FFV1_OPTS+=(${SCREENING_FFV1_AUDIO_OPTS[@]})
+        fi
+        OUTPUTS+=(${SCREENING_FFV1_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${OUTPUTOPTIONS[@]} ${SCREENING_FFV1_OUTPUT})
     fi
     _mkdir2 "${LOGDIR}"
     export FFREPORT="file=${LOGDIR}/$(basename "${0}")_%p_%t.txt"
