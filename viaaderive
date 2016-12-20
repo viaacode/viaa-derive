@@ -346,9 +346,9 @@ PRODUCTION_IMX_OPTS+=(-tag:v mx5p)
 # audio settings
 PRODUCTION_IMX_AUDIO_OPTS+=(-c:a pcm_s16le)
 # container settings
-SCREENING_PRORES_OPTS+=(-f mov)
-SCREENING_PRORES_OPTS+=(-map 0:v)
-SCREENING_PRORES_AUDIO_OPTS+=(-map 0:a)
+PRODUCTION_IMX_OPTS+=(-f mov)
+PRODUCTION_IMX_OPTS+=(-map 0:v)
+PRODUCTION_IMX_AUDIO_OPTS+=(-map 0:a)
 
 # FRAMEMD5 settings
 # output settings
