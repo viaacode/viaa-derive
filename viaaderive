@@ -10,6 +10,7 @@ FFPROBE_PATH="ffprobe"
 INPUTOPTIONS+=(-nostdin)
 INPUTOPTIONS+=(-vsync 0)
 INPUTOPTIONS+=(-hide_banner)
+LOGDIR="LOGS"
 
 # usage
 _usage(){
@@ -43,6 +44,7 @@ _usage(){
     echo
     echo "-y, --overwrite       Overwrite output files by default,"
     echo "                      same as --outputoptions '-y'"
+    echo "-r, --report          Output a report per transcoding."
     echo
     echo "Note that setting a --*path implies that the corresponding output is enabled."
     echo "Also note that if the output file already exists, then that output will be disabled."
@@ -64,6 +66,7 @@ while true ; do
         --inputoptions ) shift ; INPUTOPTIONS+=(${1}) ; shift ;;
         --outputoptions ) shift ; OUTPUTOPTIONS+=(${1}) ; shift ;;
         -y | --overwrite ) shift ; OUTPUTOPTIONS+=(-y) ;;
+        -r | --report ) shift ; export FFREPORT="file=${LOGDIR}/$(basename "${0}")_%p_%t.txt" ; _mkdir2 "${LOGDIR}" ;;
         --ffv1 ) shift ; SCREENING_FFV1_ENABLE=true ;;
         --ffv1path ) shift ; SCREENING_FFV1_ENABLE=true ; SCREENING_FFV1_OUTPUT="${1}" ; shift ;;
         --mpeg4 ) shift ; STREAMING_MPEG4_ENABLE=true ;;
@@ -281,8 +284,6 @@ _get_audio_mapping(){
     fi
 }
 
-LOGDIR="LOGS"
-
 # STREAMING_MPEG4 settings
 # output settings
 STREAMING_MPEG4_EXTENSION="mp4"
@@ -462,8 +463,6 @@ while [ "${*}" != "" ] ; do
         fi
         OUTPUTS+=(${SCREENING_FFV1_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${OUTPUTOPTIONS[@]} ${SCREENING_FFV1_OUTPUT})
     fi
-    _mkdir2 "${LOGDIR}"
-    export FFREPORT="file=${LOGDIR}/$(basename "${0}")_%p_%t.txt"
     echo "${FFMPEG_PATH}" "${INPUTOPTIONS[@]}" -i "${INPUT}" "${OUTPUTS[@]}"
     "${FFMPEG_PATH}" "${INPUTOPTIONS[@]}" -i "${INPUT}" "${OUTPUTS[@]}"
     echo
