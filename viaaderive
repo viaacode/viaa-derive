@@ -234,11 +234,14 @@ _add_audio_filter(){
 }
 _filter_to_middle_option(){
     if [ -n "${VIDEOFILTERCHAIN}" -a -n "${AUDIOFILTERCHAIN}" ] ; then
-        MIDDLEOPTIONS+=(-filter_complex ${VIDEOFILTERCHAIN}\;${AUDIOFILTERCHAIN})
+        echo hi 1
+        FILTERCHAIN+=(-filter_complex ${VIDEOFILTERCHAIN}\;${AUDIOFILTERCHAIN})
     elif [ -n "${VIDEOFILTERCHAIN}" ] ; then
-        MIDDLEOPTIONS+=(-filter_complex ${VIDEOFILTERCHAIN})
+        echo hi 2
+        FILTERCHAIN+=(-filter_complex ${VIDEOFILTERCHAIN})
     elif [ -n "${AUDIOFILTERCHAIN}" ] ; then
-        MIDDLEOPTIONS+=(-filter_complex ${AUDIOFILTERCHAIN})
+        echo hi 3
+        FILTERCHAIN+=(-filter_complex ${AUDIOFILTERCHAIN})
     fi
 }
 # _get_input info
@@ -406,11 +409,13 @@ while [ "${*}" != "" ] ; do
     # encoding options
     _get_input_info "${INPUT}"
     _get_audiostreamcount "${INPUT}"
-    
+
     if [[ "${CODEC_NAME}" == "jpeg2000" && "${HEIGHT}" == "288" ]] ; then
         _add_video_filter "weave=first_field=bottom,setfield=tff"
         _add_video_filter "setsar=sar*2"
     fi
+
+    _filter_to_middle_option
 
     if "${STREAMING_MPEG4_ENABLE}" ; then
         if [[ -z "${STREAMING_MPEG4_OUTPUT+1}" ]] ; then
@@ -420,7 +425,7 @@ while [ "${*}" != "" ] ; do
         if [[ "${AUDIOSTREAMCOUNT}" > 0 ]] ; then
             STREAMING_MPEG4_OPTS+=(${STREAMING_MPEG4_AUDIO_OPTS[@]})
         fi
-        OUTPUTS+=(${STREAMING_MPEG4_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${OUTPUTOPTIONS[@]} ${STREAMING_MPEG4_OUTPUT})
+        OUTPUTS+=(${STREAMING_MPEG4_OPTS[@]} ${FILTERCHAIN[@]} ${OUTPUTOPTIONS[@]} ${STREAMING_MPEG4_OUTPUT})
     fi
 
     if "${STREAMING_WEBM_ENABLE}" ; then
@@ -431,7 +436,7 @@ while [ "${*}" != "" ] ; do
         if [[ "${AUDIOSTREAMCOUNT}" > 0 ]] ; then
             STREAMING_WEBM_OPTS+=(${STREAMING_WEBM_AUDIO_OPTS[@]})
         fi
-        OUTPUTS+=(${STREAMING_WEBM_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${OUTPUTOPTIONS[@]} ${STREAMING_WEBM_OUTPUT})
+        OUTPUTS+=(${STREAMING_WEBM_OPTS[@]} ${FILTERCHAIN[@]} ${OUTPUTOPTIONS[@]} ${STREAMING_WEBM_OUTPUT})
     fi
 
     if "${FRAMEMD5_ENABLE}" ; then
@@ -439,7 +444,7 @@ while [ "${*}" != "" ] ; do
             FRAMEMD5_OUTPUT="${FRAMEMD5_RELATIVE_PATH}/$(basename "${INPUT%.*}")${FRAMEMD5_SUFFIX}.${FRAMEMD5_EXTENSION}"
         fi
         _mkdir2 "$(dirname "${FRAMEMD5_OUTPUT}")"
-        OUTPUTS+=(${FRAMEMD5_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${OUTPUTOPTIONS[@]} ${FRAMEMD5_OUTPUT})
+        OUTPUTS+=(${FRAMEMD5_OPTS[@]} ${FILTERCHAIN[@]} ${OUTPUTOPTIONS[@]} ${FRAMEMD5_OUTPUT})
     fi
 
     if "${SCREENING_PRORES_ENABLE}" ; then
@@ -450,7 +455,7 @@ while [ "${*}" != "" ] ; do
         if [[ "${AUDIOSTREAMCOUNT}" > 0 ]] ; then
             SCREENING_PRORES_OPTS+=(${SCREENING_PRORES_AUDIO_OPTS[@]})
         fi
-        OUTPUTS+=(${SCREENING_PRORES_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${OUTPUTOPTIONS[@]} ${SCREENING_PRORES_OUTPUT})
+        OUTPUTS+=(${SCREENING_PRORES_OPTS[@]} ${FILTERCHAIN[@]} ${OUTPUTOPTIONS[@]} ${SCREENING_PRORES_OUTPUT})
     fi
 
     if "${SCREENING_FFV1_ENABLE}" ; then
@@ -461,7 +466,7 @@ while [ "${*}" != "" ] ; do
         if [[ "${AUDIOSTREAMCOUNT}" > 0 ]] ; then
             SCREENING_FFV1_OPTS+=(${SCREENING_FFV1_AUDIO_OPTS[@]})
         fi
-        OUTPUTS+=(${SCREENING_FFV1_OPTS[@]} -vf ${VIDEOFILTERCHAIN} ${OUTPUTOPTIONS[@]} ${SCREENING_FFV1_OUTPUT})
+        OUTPUTS+=(${SCREENING_FFV1_OPTS[@]} ${FILTERCHAIN[@]} ${OUTPUTOPTIONS[@]} ${SCREENING_FFV1_OUTPUT})
     fi
     echo "${FFMPEG_PATH}" "${INPUTOPTIONS[@]}" -i "${INPUT}" "${OUTPUTS[@]}"
     "${FFMPEG_PATH}" "${INPUTOPTIONS[@]}" -i "${INPUT}" "${OUTPUTS[@]}"
