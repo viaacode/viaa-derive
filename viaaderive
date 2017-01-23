@@ -300,6 +300,7 @@ STREAMING_MPEG4_AUDIO_OPTS+=(-c:a aac)
 # container settings
 STREAMING_MPEG4_OPTS+=(-f mp4)
 STREAMING_MPEG4_OPTS+=(-movflags faststart)
+STREAMING_MPEG4_OPTS+=(-map "[f1]")
 
 # STREAMING_WEBM settings
 # output settings
@@ -314,6 +315,7 @@ STREAMING_WEBM_OPTS+=(-maxrate 2000k) # set maximum bitrate despite quality
 STREAMING_WEBM_AUDIO_OPTS+=(-c:a opus)
 # container settings
 STREAMING_WEBM_OPTS+=(-f webm)
+STREAMING_WEBM_OPTS+=(-map "[f1]")
 
 # Production IMX settings
 # output settings
@@ -351,7 +353,7 @@ PRODUCTION_IMX_OPTS+=(-tag:v mx5p)
 PRODUCTION_IMX_AUDIO_OPTS+=(-c:a pcm_s16le)
 # container settings
 PRODUCTION_IMX_OPTS+=(-f mov)
-PRODUCTION_IMX_OPTS+=(-map 0:v)
+PRODUCTION_IMX_OPTS+=(-map "[f1]")
 PRODUCTION_IMX_AUDIO_OPTS+=(-map 0:a)
 
 # FRAMEMD5 settings
@@ -361,7 +363,7 @@ FRAMEMD5_SUFFIX="_framemd5"
 FRAMEMD5_RELATIVE_PATH="FRAMEMD5"
 # container settings
 FRAMEMD5_OPTS+=(-f framemd5)
-FRAMEMD5_OPTS+=(-map 0:v)
+FRAMEMD5_OPTS+=(-map "[f1]")
 
 # SCREENING_PRORES settings
 # output settings
@@ -376,7 +378,7 @@ SCREENING_PRORES_OPTS+=(-flags +ildct+ilme)
 SCREENING_PRORES_AUDIO_OPTS+=(-c:a pcm_s16le)
 # container settings
 SCREENING_PRORES_OPTS+=(-f mov)
-SCREENING_PRORES_OPTS+=(-map 0:v)
+SCREENING_PRORES_OPTS+=(-map "[f1]")
 SCREENING_PRORES_AUDIO_OPTS+=(-map 0:a)
 
 # SCREENING_FFV1 settings
@@ -394,7 +396,7 @@ SCREENING_FFV1_OPTS+=(-slicecrc 1)
 SCREENING_FFV1_AUDIO_OPTS+=(-c:a flac)
 # container settings
 SCREENING_FFV1_OPTS+=(-f matroska)
-SCREENING_FFV1_OPTS+=(-map 0:v)
+SCREENING_FFV1_OPTS+=(-map "[f1]")
 SCREENING_FFV1_AUDIO_OPTS+=(-map 0:a)
 
 while [ "${*}" != "" ] ; do
@@ -409,7 +411,7 @@ while [ "${*}" != "" ] ; do
 
     if [[ "${CODEC_NAME}" == "jpeg2000" && "${HEIGHT}" == "288" ]] ; then
         _add_video_filter "[0:v:0]weave=first_field=bottom,setfield=tff"
-        _add_video_filter "setsar=sar*2"
+        _add_video_filter "setsar=sar*2[f1]"
     fi
 
     _filter_to_middle_option
