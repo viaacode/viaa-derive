@@ -301,6 +301,7 @@ STREAMING_MPEG4_AUDIO_OPTS+=(-c:a aac)
 STREAMING_MPEG4_OPTS+=(-f mp4)
 STREAMING_MPEG4_OPTS+=(-movflags faststart)
 STREAMING_MPEG4_OPTS+=(-map "[f1]")
+STREAMING_MPEG4_AUDIO_OPTS+=(-map 0:a:0)
 
 # STREAMING_WEBM settings
 # output settings
@@ -316,6 +317,7 @@ STREAMING_WEBM_AUDIO_OPTS+=(-c:a opus)
 # container settings
 STREAMING_WEBM_OPTS+=(-f webm)
 STREAMING_WEBM_OPTS+=(-map "[f1]")
+STREAMING_WEBM_AUDIO_OPTS+=(-map 0:a:0)
 
 # Production IMX settings
 # output settings
