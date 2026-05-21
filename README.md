@@ -1,6 +1,6 @@
 ## README.md
 
-# VIAA Derivative Script
+# Derivative Video Script
 
 This is a Bash shell script designed to create derivative video files from one or more input video files. It leverages `ffmpeg` and `ffprobe` to perform various video transcodings and analyses respectively on one or more source files, supporting multiple output formats such as MPEG-4, WebM, ProRes, FFV1, and frame MD5 checksum generation.
 
