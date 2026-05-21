@@ -406,7 +406,7 @@ while [ "${*}" != "" ] ; do
     _get_audiostreamcount "${INPUT}"
 
     if [[ "${CODEC_NAME}" == "jpeg2000" && "${HEIGHT}" == "288" ]] ; then
-        _add_video_filter "[0:v:0]weave=first_field=bottom,setfield=tff"
+        _add_video_filter "[0:v:0]weave=first_field=bottom,setfield=tff,scale=flags=bicubic"
         _add_video_filter "setsar=sar*2[f1]"
         STREAMING_MPEG4_OPTS+=(-map "[f1]")
         STREAMING_WEBM_OPTS+=(-map "[f1]")
@@ -415,6 +415,7 @@ while [ "${*}" != "" ] ; do
         SCREENING_PRORES_OPTS+=(-map "[f1]")
         SCREENING_FFV1_OPTS+=(-map "[f1]")
     else
+        _add_video_filter "[0:v:0]scale=flags=bicubic"
         STREAMING_MPEG4_OPTS+=(-map 0:v)
         STREAMING_WEBM_OPTS+=(-map 0:v)
         PRODUCTION_IMX_OPTS+=(-map 0:v)
