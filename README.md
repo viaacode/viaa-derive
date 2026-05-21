@@ -9,7 +9,7 @@ This is a Bash shell script designed to create derivative video files from one o
 - **Multiple output formats**: Supports MPEG-4, WebM, ProRes, FFV1, and frame MD5 (framemd5) outputs.
 - **Option flags**: Allows specifying custom paths and additional FFmpeg input and output options.
 - **Overwrite control**: Option to overwrite output files by default.
-- **Reporting**: Errors and other messages per transcoding process.
+- **Reporting**: Generates detailed reports per transcoding process.
 - **Input validation**: Checks codec and resolution to adjust processing accordingly.
 - **Audio channel handling**: Merges audio channels when necessary for stereo output.
 
@@ -71,7 +71,7 @@ This command will generate MPEG-4, ProRes, WebM, and FFV1 derivatives for `FILE1
 1. **Prepare Environment**: Ensure `ffmpeg` and `ffprobe` are installed and accessible.
 2. **Run Script**: Execute the script with desired input files and options.
 3. **Verify Outputs**: Check the designated output directories for the generated derivative files.
-4. **Troubleshoot**: Use the `--report` option for detailed messages and adjust paths/options if necessary.
+4. **Troubleshoot**: Use the `--report` option and adjust paths/options if necessary.
 
 ## Contributing
 
