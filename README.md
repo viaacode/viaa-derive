@@ -4,6 +4,13 @@
 
 This is a Bash shell script designed to create derivative video files from one or more input video files. It leverages `ffmpeg` and `ffprobe` to perform various video transcodings and analyses respectively on one or more source files, supporting multiple output formats such as MPEG-4, WebM, ProRes, FFV1, and frame MD5 checksum generation.
 
+The script aims to streamline a workflow for producing high-quality video derivatives. It was created as part of a series of tests focusing on technical characteristics of FFv1 and MKV formats by meemoo (then VIAA). Through this research, meemoo gained insight into the practical usability of these new formats and identified areas that still needed further refinement. The study was conducted in collaboration with Media Area and Packed vzw (now meemoo) and fits within the Preforma project, in which meemoo participated as part of its advisory group.
+
+Further reading:
+
+- [Resultaten onderzoek ffv1 en mkv](https://kennisbank.meemoo.be/inzichten-en-praktijk/resultaten-onderzoek-ffv1-en-mkv) (Dutch)
+- [VIAA Preservation Reformatting](https://www.projectcest.be/w/images/Rapport-studie-naar-het-herformatteren-van-het-viaa-archief.pdf) (English - pdf) 
+
 ## Features
 
 - **Multiple output formats**: Supports MPEG-4, WebM, ProRes, FFV1, and frame MD5 (framemd5) outputs.
