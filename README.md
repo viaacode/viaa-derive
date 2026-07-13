@@ -1,5 +1,3 @@
-## README.md
-
 # Derivative Video Script
 
 This is a Bash shell script designed to create derivative video files from one or more input video files. It leverages `ffmpeg` and `ffprobe` to perform various video transcodings and analyses respectively on one or more source files, supporting multiple output formats such as MPEG-4, WebM, ProRes, FFV1, and frame MD5 checksum generation.
@@ -17,12 +15,12 @@ The script aims to streamline a workflow for producing high-quality video deriva
 - **Option flags**: Allows specifying custom paths and additional FFmpeg input and output options.
 - **Overwrite control**: Option to overwrite output files by default.
 - **Reporting**: Generates detailed reports per transcoding process.
-- **Input validation**: Checks codec and resolution to adjust processing accordingly.
-- **Audio channel handling**: Merges audio channels when necessary for stereo output.
+- **Format-specific handling**: Detects specific source characteristics (e.g. JPEG 2000 SD sources) and adjusts the filter chain accordingly.
+- **Audio handling**: Maps the first audio stream to the output.
 
 ## Requirements
 
-- **ffmpeg**: Compiled with `libx264`, `libvpx`, `libopus`, and other necessary libraries for video and audio encoding.
+- **ffmpeg**: Compiled with `libx264`, `libvpx`, `libopus`, `flac`, and other necessary libraries for video and audio encoding.
 - **ffprobe**: Must be available in the system PATH or specified via `--ffprobepath`.
 - **Bash**: The script is written for Bash shell compatibility.
 - **Linux/Unix Environment**: Tested on Linux environments; may require adjustments for macOS or other Unix-like systems.
@@ -30,7 +28,7 @@ The script aims to streamline a workflow for producing high-quality video deriva
 ## Usage
 
 ```bash
-viaaderive.sh [options] inputvideo1 [inputvideo2 ...]
+viaaderive [options] inputvideo1 [inputvideo2 ...]
 ```
 
 ### Options
@@ -56,10 +54,12 @@ viaaderive.sh [options] inputvideo1 [inputvideo2 ...]
 | `--framemd5`         | Enable frame MD5 (framemd5) output.                                                                                                                                                                         |
 | `--framemd5path`     | Specify an output file for frame MD5.                                                                                                                                                                       |
 
+**Note:** Setting any `--*path` option automatically enables the corresponding output.
+
 ### Example
 
 ```bash
-./viaaderive.sh -o mpeg4+prores+webm+ffv1 FILE1.mp4 FILE2.mp4
+./viaaderive -o mpeg4+prores+webm+ffv1 FILE1.mp4 FILE2.mp4
 ```
 
 This command will generate MPEG-4, ProRes, WebM, and FFV1 derivatives for `FILE1.mp4` and `FILE2.mp4`.
