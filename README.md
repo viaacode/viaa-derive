@@ -6,7 +6,7 @@ The script aims to streamline a workflow for producing high-quality video deriva
 
 **Further reading**:
 
-- [Resultaten onderzoek ffv1 en mkv](https://kennisbank.meemoo.be/inzichten-en-praktijk/resultaten-onderzoek-ffv1-en-mkv) (Dutch)
+- [Resultaten onderzoek ffv1 en mkv](https://id.kbde.be/0195d194-4c3a-71f4-8174-e0fd23fa31f0) (Dutch)
 - [VIAA Preservation Reformatting](https://www.projectcest.be/w/images/Rapport-studie-naar-het-herformatteren-van-het-viaa-archief.pdf) (English - pdf) 
 
 ## Features
